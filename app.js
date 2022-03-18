@@ -8,6 +8,7 @@ const btn = document.querySelector('.btn')
 var foo = (e) => {
     cardOpen(e.target)
 }
+var test;
 
 // btn.addEventListener('click', initGame)
 initGame()
@@ -44,6 +45,7 @@ function shuffleCards() {
     cards.forEach( function(e, i){
 
         e.setAttribute('color', colors[i])
+
     })
 
     let unshuffled = Array.from(cards);
@@ -62,6 +64,11 @@ function shuffleCards() {
     cards.forEach( e => {UIwrapper.appendChild(e)
   
         e.addEventListener('click', foo )
+
+        if (Math.floor(Math.random() * 100) + 1 < 10 ){
+            test = () => {twist(e)}
+            e.addEventListener('click', test)
+        }
 
     })
 
@@ -99,4 +106,33 @@ function cardOpen(card){
     }
 }
 
+function twist(card){
+
+    if(card.getAttribute('twist') != 1){
+
+        card.style.transition = 'border 0.2s ease-in'
+        card.style.border = '1px solid black'
+        card.innerText = "Don't click away"
+        card.setAttribute('twist', 1)
+        
+        var fun = () => {
+            card.style.transition = ''
+            card.style.backgroundColor = ''
+            card.style.border = ''
+            card.innerText = "NO!"
+            setTimeout( () => card.innerText = "", 200)
+        }
+    
+        cards.forEach(e => {
+    
+            e.addEventListener('click', fun)
+            e.addEventListener('click', () => {
+                cards.forEach( e => {
+                    e.removeEventListener('click', fun)
+                })
+            })
+        })
+    }
+
+}
 
